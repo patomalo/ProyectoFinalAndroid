@@ -1,5 +1,6 @@
 package edu.math;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import android.util.Log;
@@ -201,45 +202,58 @@ public class basicMath {
 		key[0] = keys[0];
 		for(int i=1;i<keys.length;i++) {//comenzamos desde 1 para no tomar como operacion al 0 si es q es negativo
 			if(keys[i].trim().equals("OP")) {
+				//verify parentesis
+				boolean a1 = (keys[i-1] != "SF1" && 
+							  keys[i-1] != "SF2" &&
+							  keys[i-1] != "SF3");
+				boolean a2 = (keys[i+1] != "SI1" &&
+							  keys[i+1] != "SI2" &&
+							  keys[i+1] != "SI3");
+				Log.i(TAG, "VERIFCACION NUMERO "+keys[i-1]+" "+keys[i+1]);
+				Log.i(TAG, (a1==true)?"true":"false");
+				Log.i(TAG, (a2==true)?"true":"false");
 				
-				if(vars[i].trim().equals("*") || vars[i].trim().equals("/")) {
-					Log.d(TAG, " PASAMOS LA VALIDACION");
-					if(i-1 != 0) {
-						if(keys[i-2].equals("OP")) {
-							Log.w(TAG, "1er valor TIENE SIGNO");
-							env[0] = va[i-2];
-							va[i-2]="";key[i-2]="";
-							vars[i-2]="";
+				if(a1==true && a2==true) {
+					
+					if(vars[i].trim().equals("*") || vars[i].trim().equals("/")) {
+						Log.d(TAG, " PASAMOS LA VALIDACION");
+						if(i-1 != 0) {
+							if(keys[i-2].equals("OP")) {
+								Log.w(TAG, "1er valor TIENE SIGNO");
+								env[0] = va[i-2];
+								va[i-2]="";key[i-2]="";
+								vars[i-2]="";
+							} else {
+								Log.w(TAG, "1er valor NO TIENE SIGNO");
+								env[0] = "";
+							}
 						} else {
 							Log.w(TAG, "1er valor NO TIENE SIGNO");
 							env[0] = "";
 						}
-					} else {
-						Log.w(TAG, "1er valor NO TIENE SIGNO");
-						env[0] = "";
+						if(keys[i+1].equals("OP")) {
+							Log.w(TAG, "2do valor TIENE SIGNO");
+							env[4] = vars[i+1];
+							env[5] = vars[i+2];
+							env[6] = keys[i+2];
+							vars[i+1]="";vars[i+2]="";
+						} else {
+							Log.w(TAG, "2do valor NO TIENE SIGNO");
+							env[4] = "";
+							env[5] = vars[i+1];
+							env[6] = keys[i+1];
+							vars[i+1]="";
+						}
+						//envios
+						env[1]=vars[i-1];env[2]=keys[i-1];
+						env[3]=vars[i];
+						//borrados
+						va[i-1] = "";key[i-1] = "";vars[i-1]="";
+						vars[i]="";
+						solu = oper.multiDiv(env);
+						pib = i;
+						break;
 					}
-					if(keys[i+1].equals("OP")) {
-						Log.w(TAG, "2do valor TIENE SIGNO");
-						env[4] = vars[i+1];
-						env[5] = vars[i+2];
-						env[6] = keys[i+2];
-						vars[i+1]="";vars[i+2]="";
-					} else {
-						Log.w(TAG, "2do valor NO TIENE SIGNO");
-						env[4] = "";
-						env[5] = vars[i+1];
-						env[6] = keys[i+1];
-						vars[i+1]="";
-					}
-					//envios
-					env[1]=vars[i-1];env[2]=keys[i-1];
-					env[3]=vars[i];
-					//borrados
-					va[i-1] = "";key[i-1] = "";vars[i-1]="";
-					vars[i]="";
-					solu = oper.multiDiv(env);
-					pib = i;
-					break;
 				}
 			}
 			va[i] = vars[i];
@@ -433,7 +447,7 @@ public class basicMath {
 	 */
 	public boolean isNumber(String s) {
 		char c = s.charAt(0);
-		int as = c;
+		int as = (int) c;
 		if(as >= 48 && as <= 57) {
 			return true;
 		}
@@ -447,7 +461,7 @@ public class basicMath {
 	 */
 	public boolean isLetter(String s) {
 		char c = s.charAt(0);
-		int as = c;
+		int as = (int) c;
 		if((as>=65 && as<=90)||(as>=97 && as<=122)) {
 			return true;
 		}

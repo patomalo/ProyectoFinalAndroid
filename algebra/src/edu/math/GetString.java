@@ -96,7 +96,7 @@ public class GetString {
 	 */
 	public boolean isNumber(String s) {
 		char c = s.charAt(0);
-		int as = c;
+		int as = (int) c;
 		if(as >= 48 && as <= 57) {
 			return true;
 		}
@@ -110,7 +110,7 @@ public class GetString {
 	 */
 	public boolean isLetter(String s) {
 		char c = s.charAt(0);
-		int as = c;
+		int as = (int) c;
 		if((as>=65 && as<=90)||(as>=97 && as<=122)) {
 			return true;
 		}

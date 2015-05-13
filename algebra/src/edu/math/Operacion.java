@@ -20,8 +20,8 @@ public class Operacion {
 		Log.w(TAG, "SumRes - SEPARADO: "+v1[0]+" "+v1[1]+" "+v2[0]+" "+v2[1]);
 		// checking variables
 		s[3] = this.checkSumResSameVariable(v1[1], v2[1], key);
-		if(!s[3].equals("")) {
-			if(sa != "" && sa == "-") v1[0] = sa + v1[0];
+		if(s[3] != "") {
+			if(sa.equals("-")) v1[0] = sa + v1[0];
 			if(sb.equals("+")) res = sumar(v1[0],v2[0]);
 			else if(sb.equals("-")) res = restar(v1[0],v2[0]);
 			//verify, if the result is negative
@@ -78,7 +78,7 @@ public class Operacion {
 				res="V4";
 			}
 		}
-		Log.i(TAG, "SumRes - Same variable:"+res);
+		Log.i(TAG, "SumRes - Same variable: "+res);
 		return res;
 	}
 	public String[] multiplicar(String sa,String a, String sb,String b) {
@@ -195,7 +195,7 @@ public class Operacion {
 	 */
 	public boolean isNumber(String s) {
 		char c = s.charAt(0);
-		int as = c;
+		int as = (int) c;
 		if(as >= 48 && as <= 57) {
 			return true;
 		}
